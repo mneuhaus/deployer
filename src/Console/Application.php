@@ -7,6 +7,7 @@
 
 namespace Deployer\Console;
 
+use Deployer\Console\PluginCommand;
 use KevinGH\Amend\Command;
 use KevinGH\Amend\Helper;
 use Symfony\Component\Console\Application as Console;
@@ -21,7 +22,7 @@ class Application extends Console
      * @var InputDefinition
      */
     private $userDefinition;
-    
+
     /**
      * {@inheritdoc}
      */
@@ -43,6 +44,7 @@ class Application extends Console
     {
         $commands = parent::getDefaultCommands();
         $commands[] = $this->selfUpdateCommand();
+        $commands[] = new PluginCommand();
         return $commands;
     }
 
@@ -75,7 +77,7 @@ class Application extends Console
         if (null === $this->userDefinition) {
             $this->userDefinition = new InputDefinition();
         }
-        
+
         return $this->userDefinition;
     }
 

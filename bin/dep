@@ -27,6 +27,24 @@ if (!$loaded) {
 // Recipe include path
 set_include_path(__DIR__ . '/../' . PATH_SEPARATOR . get_include_path());
 
+// add global plugin directory to include path
+$userDirectory = getenv('HOME');
+if (!empty($userDirectory)) {
+    // home should never end with a trailing slash.
+    $userDirectory = rtrim($userDirectory, '/');
+} elseif (!empty($_SERVER['HOMEDRIVE']) && !empty($_SERVER['HOMEPATH'])) {
+    // home on windows
+    $userDirectory = $_SERVER['HOMEDRIVE'] . $_SERVER['HOMEPATH'];
+    // If HOMEPATH is a root directory the path can end with a slash. Make sure
+    // that doesn't happen.
+    $userDirectory = rtrim($userDirectory, '\\/');
+}
+
+if (!empty($userDirectory)) {
+    define('DEPLOYER_PLUGIN_PATH', $userDirectory . '/.deployer');
+    set_include_path(get_include_path() . PATH_SEPARATOR . DEPLOYER_PLUGIN_PATH . '/vendor/');
+}
+
 // Include function declarations
 require_once 'src/functions.php';
 
